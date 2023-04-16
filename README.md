@@ -1,2 +1,2 @@
-# mil2023teamA
-2023 CAU Military AI Team A
+# caumil2023teamA
+CAU Military 2023 AI Research Team A
