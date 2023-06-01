@@ -2,37 +2,28 @@
 
 # Facial Emotion Recognition
 
-## 의존 프로그램 설치
-- CUDA, CUDNN 설치 
+## 환경 설정
+- 아나콘다 설치 (가상환경)
+  - https://somjang.tistory.com/entry/Windows-Windows%EC%97%90%EC%84%9C-Anaconda-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0
+- CUDA, CUDNN 설치 (GPU 사용을 위해)
   - https://donggyu-oh.tistory.com/2
-- 자신의 CUDA 버전에 맞는 pytorch 설치 (GPU 사용을 위해)
+- 자신의 CUDA 버전에 맞는 pytorch 설치 https://pytorch.org/get-started/previous-versions/
+- 실행화면
+
+<img src="imgs/terminal.jpg">
 
 ```python
+# Clone Repository
+git clone https://github.com/tiruss/mil2023teamA.git
+cd mil2023teamA/EmotionNet
+# 가상환경 생성
 conda create -n emotion python=3.9
-# CUDA 11.7 기준
+# 가상환경 실행
+conda activate emotion
+# CUDA 11.7 기준 예시
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu117
+# 기타 라이브러리 설치
 pip install -r reqiurements.txt
-```
-
-## 데이터셋 이미지 정보
-
-- 얼굴 표정 데이터는 크게 "연기자" 데이터와 "일반인" 데이터로 구성되어 있으며 그 비율은 약 5:5로 되어 있음
-- 얼굴 표정은 ['기쁨', '당황', '분노', '불안', '상처', '슬픔', '중립’] 7개로 분류됨
-- 메타데이터로는 3명의 작업자가 판단한 얼굴 표정, 이미지에서 얼굴이 위치한 영역, 배경 정보가 포함되어 있음
-
-주어진 TSV(tab-separated variables)는 다음과 같은 컬럼들로 구성되어 있다.
-
-```
-name
-url	TaskA_emotion
-TaskB_emotion
-TaskC_emotion
-TaskA_background
-TaskB_background
-TaskC_background
-TaskA_result
-TaskB_result
-TaskC_result
 ```
 
 ## 데이터 학습
@@ -59,7 +50,7 @@ python train.py [args]
 ## 학습 결과
 
 ```python
-python test.py [args]
+python test-efficientnet.py [args]
 ```
 
 - /data/test 데이터를 바탕으로 모델의 정확도를 평가할 수 있다.
@@ -70,6 +61,28 @@ python test.py [args]
   - --batch_size (128): 배치의 크기 설정
   - --image_size (48): 이미지 리사이즈 크기
   - --image_channel (1): 이미지 채널 크기 
+
+## 데이터셋 이미지 정보
+
+- 얼굴 표정 데이터는 크게 "연기자" 데이터와 "일반인" 데이터로 구성되어 있으며 그 비율은 약 5:5로 되어 있음
+- 얼굴 표정은 ['기쁨', '당황', '분노', '불안', '상처', '슬픔', '중립’] 7개로 분류됨
+- 메타데이터로는 3명의 작업자가 판단한 얼굴 표정, 이미지에서 얼굴이 위치한 영역, 배경 정보가 포함되어 있음
+
+주어진 TSV(tab-separated variables)는 다음과 같은 컬럼들로 구성되어 있다.
+
+```
+name
+url	TaskA_emotion
+TaskB_emotion
+TaskC_emotion
+TaskA_background
+TaskB_background
+TaskC_background
+TaskA_result
+TaskB_result
+TaskC_result
+```
+
 
 
 ## 학습한 얼굴 표정 인식 모델 사용 예시 및 결과
