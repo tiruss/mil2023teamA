@@ -62,11 +62,24 @@ python train_cau.py --model "resnet18" --image_size 48 --model_path "resNet_cau.
 python train_cau.py --model "efficientnet-b4" --image_size 224 --model_path "efficientNet_cau.pt" --image_channel 3
 ```
 
-## 학습 결과
+## 학습 결과 확인
 
 ```python
-python test-efficientnet.py [args]
+python test-efficientnet.py --model_path "OUTPUT_MODEL_NAME" --image_size "Image SIZE" --image_channel "1 or 3"
 ```
+- OUTPUT_MODEL_NAME : 학습된 모델 저장 이름
+- Image SIZE : cnn, resnet, vgg19, vgg22: 48 | vgg24: 96 | efficientnet: 224, any
+- 1 or 3 : 모델에 따라 다름, 3 for efficientnet, 1 for the rest
+
+```python
+# vgg19 경우
+python test-efficientnet.py --model_path "vggNet_cau.pt" --image_size 48 --image_channel 1
+# ResNet 경우
+python test-efficientnet.py --model_path "resNet_cau.pt" --image_size 48 --image_channel 1
+# efficientnet 경우
+python test-efficientnet.py --model_path "efficientNet_cau.pt" --image_size 224 --image_channel 3
+```
+
 
 - /data/test 데이터를 바탕으로 모델의 정확도를 평가할 수 있다.
 - 입력 파라미터(기본값)는 다음과 같이 설정되어 있다.
@@ -76,7 +89,8 @@ python test-efficientnet.py [args]
   - --batch_size (128): 배치의 크기 설정
   - --image_size (48): 이미지 리사이즈 크기
   - --image_channel (1): 이미지 채널 크기 
-
+- - -
+- - -
 ## 데이터셋 이미지 정보
 
 - 얼굴 표정 데이터는 크게 "연기자" 데이터와 "일반인" 데이터로 구성되어 있으며 그 비율은 약 5:5로 되어 있음
