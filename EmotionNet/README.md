@@ -26,26 +26,41 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 pip install -r reqiurements.txt
 ```
 
+## 데이터 다운로드
+- 구글 드라이브 링크 접속 [LINK](https://drive.google.com/drive/folders/14MVJA578jqM27MU5yzM8bTqk39INbG24?usp=share_link)
+- "data" 폴더 내 "cau.zip", "ai_hub.zip" 압축파일 다운로드 및 압축 해제
+- 폴더 구성
+```
+data
+|___ai_hub
+|   |___train
+|   |___val
+|   |___test
+|___cau
+|   |___train
+|   |___val
+|train_cau.py
+...
+```
+
 ## 데이터 학습
 
 ```python
-python train.py [args]
+python train_cau.py --model "MODEL_NAME" --image_size "Image SIZE" --model_path "OUTPUT_MODEL_NAME" --image_channel "1 or 3"
 ```
+- MODEL_NAME : vgg19, resnet18, emotionnet, efficientnet-b4
+- Image SIZE : cnn, resnet, vgg19, vgg22: 48 | vgg24: 96 | efficientnet: 224, any
+- OUTPUT_MODEL_NAME : 모델 저장 이름
+- 1 or 3 : 모델에 따라 다름, 3 for efficientnet, 1 for the rest
 
-- 학습에 사용하는 각종 파라미터를 정할 수 있다.
-- 입력 파라미터(기본값)는 다음과 같이 설정되어 있다. (다른 스크립트의 파라미터도 이와 유사함)
-
-  - --data_path (data): 학습에 사용할 데이터가 담긴 root folder
-  - --model_path (model.pt): 학습한 결과를 저장할 모델의 파일명
-  - --model (emotionnet): 학습에 사용할 네트워크 아키텍쳐로 cnn, resnet, vgg19, efficientnet 등이 구현되어 있음
-  - --optimizer (adadelta): 학습에 사용할 optimizer로 adadelta, adam, sgd을 사용할 수 있음
-  - --image_size (48): 이미지 리사이즈 크기
-  - --image_channel (1): 이미지 채널 크기 
-  - --gpu (True): 시스템에 GPU가 지원되는 경우, GPU를 사용하는지 여부
-  - --cuda_idx (0): 여러 개의 GPU를 사용할 경우, GPU 선택
-  - --epochs (50): 학습을 진행할 epoch 설정
-  - --batch_size (128): 배치의 크기 설정
-  - --lr (0.1): 학습률 설정
+```python
+# vgg19 경우
+python train_cau.py --model "vgg19" --image_size 48 --model_path "vggNet_cau.pt" --image_channel 1
+# ResNet 경우
+python train_cau.py --model "resnet18" --image_size 48 --model_path "resNet_cau.pt" --image_channel 1
+# efficientnet 경우
+python train_cau.py --model "efficientnet-b4" --image_size 224 --model_path "efficientNet_cau.pt" --image_channel 3
+```
 
 ## 학습 결과
 
