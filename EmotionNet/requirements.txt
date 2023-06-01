@@ -3,6 +3,4 @@ pandas
 tqdm
 opencv-python
 matplotlib
-torch
-torchvision
 torchsummary
