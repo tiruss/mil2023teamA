@@ -1,6 +1,18 @@
+# 한국인 감정인식 딥러닝 모델을 활용한 군 부대 조직 관리 시스템 (2023 대한전자공학회 하계학술대회)
+
 # Facial Emotion Recognition
 
-얼굴 표정 인식을 위한 데이터 구축 및 인식 모델 학습
+## 의존 프로그램 설치
+- CUDA, CUDNN 설치 
+  - https://donggyu-oh.tistory.com/2
+- 자신의 CUDA 버전에 맞는 pytorch 설치 (GPU 사용을 위해)
+
+```python
+conda create -n emotion python=3.9
+# CUDA 11.7 기준
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu117
+pip install -r reqiurements.txt
+```
 
 ## 데이터셋 이미지 정보
 
@@ -22,62 +34,6 @@ TaskA_result
 TaskB_result
 TaskC_result
 ```
-
-## 개발 및 테스트 환경
-
-- Ubuntu 18.04
-- python 3.7
-- pytorch 1.7.1
-- PIL 8.1.0 \*(8버전 이하 시 이미지 crop시 오류 발생)
-- Intel(R) Core(TM) i9-10900X CPU @ 3.70GHz
-- NVIDIA Quadro RTX 8000 48GB
-
-## 의존 프로그램 설치
-
-```python
-pip install -r reqiurements.txt
-```
-
-## 데이터 다운로드
-
-```python
-python downloadImage.py
-```
-
-- TSV 파일에 있는 URL에 접근하여 파일을 다운로드 받는다.
-- /original 폴더 아래에 [기쁨, 당황, 분노, ...] 하위 폴더를 만들어 파일을 저장한다.
-- 다운로드시 발생하는 오류는 download.error.log 파일에 기록된다.
-- 일시적인 네트워크 오류인 경우, 재시도하면 다운로드 받을 수 있다.
-- 오류 파일을 재시도 할 경우, 오류 로그 파일을 입력으로 넣어서 오류 파일만 다시 받을 수 있다.
-
-  ```sh
-  python downloadImage.py --input download.error.log
-  ```
-
-## 얼굴 영역 자르기
-
-```python
-python cropImages.py
-```
-
-- 얼굴 표정 인식은 얼굴 영역만 잘린 이미지를 기준으로 수행한다.
-- TSV 파일에 있는 영역을 기준으로 /original 폴더 아래에 있는 데이터에서 얼굴 영역만 자른다.
-- 얼굴 영역만 잘린 이미지는 /crop 폴더 아래에 [기쁨, 당황, 분노, ...] 하위 폴더를 만들어 파일을 저장한다.
-- TSV 파일 양식 오류는 parse.error.log 파일에 기록된다.
-- 이미지 파일에 있는 오류는 crop.error.log 파일에 기록된다.
-- 얼굴 표정을 분류한 3명의 판단이 모두 다른 경우, /crop/UNKNOWN 폴더에 별도로 분류하며, 이는 학습 데이터에 포함하지 않는다.
-- 전체 503221장의 이미지 파일 중, UNKNOWN으로 분류되는 이미지는 73264장이다.
-
-## 학습을 위한 데이터셋 준비
-
-```python
-python dataPreparation.py
-```
-
-- 얼굴 영역 이미지들을 train, validation, test 세 개의 세트로 나누어 저장한다.
-- /data 폴더 아래에 [train, validation, test] 하위 폴더를 만들어 파일을 저장한다.
-- 분할하는 비율은 train 80% (343967), validation 10% (42995), test 10% (42995) 씩으로 정해져 있으며, 변경할 수 있다.
--
 
 ## 데이터 학습
 
@@ -115,35 +71,6 @@ python test.py [args]
   - --image_size (48): 이미지 리사이즈 크기
   - --image_channel (1): 이미지 채널 크기 
 
-
-### Accuracy (%)
-
-| Network                       | Validation (%) |  Test (%)  | Model File Size | 
-| ----------------------------- | ---------- | ------ | --------------- |
-| CNN (EmotionNet)              |   81.130   | 80.858 | 55M             |
-| ResEmotionNet                 |   81.014   | 79.879 | 23M             |
-| ResNet18                      |   82.351   | 80.941 | 128M            |
-| VGG19                         |   82.407   | 80.195 | 230M            |
-| VGG22 (wide)                  |   82.303   | 79.181 | 286M            | 
-| VGG24 (deep-wide)             |   83.272   | 81.393 | 610M            |
-| EffectiveNet-b4               |   83.328   | 82.112 | 223M            |
-| EffectiveNet-b5 (img-small)   |   81.872   | 81.851 | 350M            | 
-| EffectiveNet-b5 (img-large)   |   83.356   | 83.028 | 350M            | 
-
-
-### 표정별 인식 결과
-
-| Truth\Prediction  |0|1|2|3|4|5|6|
-|-------------------|-|-|-|-|-|-|-|
-|0|7304|50|32|18|5|37|58|
-|1|39|6202|126|316|22|66|178|
-|2|26|181|5025|307|64|200|129|
-|3|37|484|317|2110|170|590|309|
-|4|8|158|141|275|528|931|193|
-|5|24|61|132|257|389|6577|172|
-|6|54|178|77|196|119|171|7952|
-
-- EffectiveNet-b5 (img-large), 343967 이미지, 50 epochs 학습, Test set 42995장 결과
 
 ## 학습한 얼굴 표정 인식 모델 사용 예시 및 결과
 
